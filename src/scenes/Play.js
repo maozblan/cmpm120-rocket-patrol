@@ -44,15 +44,15 @@ class Play extends Phaser.Scene {
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset()
-            this.ship03.reset()
+            this.shipExplode(this.ship03)
         }
         if (this.checkCollision(this.p1Rocket, this.ship02)) {
             this.p1Rocket.reset()
-            this.ship02.reset()
+            this.shipExplode(this.ship02)
         }
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset()
-            this.ship01.reset()
+            this.shipExplode(this.ship01)
         }
     }
 
@@ -66,5 +66,18 @@ class Play extends Phaser.Scene {
         } else {
             return false
         }
+    }
+
+    shipExplode(ship) {
+        // temp hide
+        ship.alpha = 0
+        // create explosion at ship's position
+        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0)
+        boom.anims.play('explode')
+        boom.on('animationcomplete', () => {
+            ship.reset()
+            ship.alpha = 1
+            boom.destroy()
+        })
     }
 }
